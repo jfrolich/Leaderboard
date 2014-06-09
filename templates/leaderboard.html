@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1>Leaderboard</h1>
+<table class='table table-hover'>
+<tr>
+        <th>Rank</th><th>Team name</th><th>Points</th>
+</tr>
+{% for leaderboard_entry in leaderboard %}
+<tr {% if leaderboard_entry[0] == 1 %}class='success'{% endif %}><td>{{leaderboard_entry[0]}}</td><td>{{leaderboard_entry[1]}}</td><td>{{leaderboard_entry[2]}}</td></tr>
+{% else %}
+
+{% endfor %}
+</table>
+    <h4>Upload new File</h1>
+    <form action="/" method=post enctype=multipart/form-data>
+
+    <div class="form-group">
+            <label for="team">Team name</label>
+            <input type=text name=team class="form-control" placeholder="Your team's name">
+    </div>
+<div class="form-group">
+    <label for="file">File</label>
+          <input type=file name=file>
+</div>
+<input type=submit value=Upload type="submit" class="btn btn-default">
+
+    </form>
+
+{% endblock %}
