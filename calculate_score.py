@@ -1,5 +1,9 @@
 import csv
-REFERENCE_FILE = 'reuters_test.csv'
+import os
+
+PATH = os.path.dirname(__file__)
+
+REFERENCE_FILE = os.path.join(PATH, 'reuters_test.csv')
 
 def create_csv_file():
     INFILE = 'c:\\Users\\JFrolich\\Documents\\Data sets\\Reuters\\fetch\\full_dataset\\metadata.csv'

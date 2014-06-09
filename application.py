@@ -7,7 +7,10 @@ import csv
 from collections import defaultdict
 #from itertools import groupby
 
-UPLOAD_FOLDER = 'uploads'
+
+PATH = os.path.dirname(__file__)
+LEADERBOARD_FILE = os.path.join(PATH, 'leaderboard.csv')
+UPLOAD_FOLDER = os.path.join(PATH, 'uploads')
 ALLOWED_EXTENSIONS = set(['csv'])
 
 app = Flask(__name__)
@@ -34,7 +37,7 @@ def leaderboard():
 
 def init_leaderboard_entries():
     # initialize the leaderboard
-    with open('leaderboard.csv', 'rU+') as f:
+    with open(LEADERBOARD_FILE, 'rU+') as f:
         reader = csv.reader(f)
         for row in reader:
             push_local_leaderboard_entry(*row)
@@ -48,7 +51,7 @@ def sanitize_team(team):
     return team.replace(',', '-').replace('"', '-').replace("'", '-')
 
 def push_leaderboard_entry(score, team, filename):
-    with open('leaderboard.csv', 'a+') as f:
+    with open(LEADERBOARD_FILE, 'a+') as f:
         f.write("%d,%s,%s\n" % (score, team, filename))
         push_local_leaderboard_entry(score, team, filename)
 
@@ -59,8 +62,6 @@ def upload_file():
         team = sanitize_team(request.form['team'])
 
         if file and allowed_file(file.filename):
-            #filename = secure_filename(file.filename)
-
             now = datetime.datetime.utcnow() + datetime.timedelta(hours=+1)
             filename = "%s_%s" % (team, now.strftime("%d-%m-%y_%H-%M.csv"))
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
