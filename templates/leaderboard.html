@@ -1,12 +1,46 @@
 {% extends "layout.html" %}
 {% block body %}
-<h1>Leaderboard</h1>
+<style>
+#deloitte-header {
+    background-color: black;
+    color: white;
+    margin: 0px;
+    padding: 10px;
+/*    height: 75px;
+*/}
+#deloitte-header #logo {
+    float: left;
+    padding: 10px;
+    padding-right: 25px;
+}
+#deloitte-header h1 {
+    float: left;
+    margin-top: 8px;
+    font-size: 30px;
+}
+
+#explanation {
+    font-size: 13px;
+    clear: both;
+    padding: 10px;
+}
+</style>
+<div id='deloitte-header' class=''><div id='logo'><img src='static/img/deloitte.gif'  height=25></div><h1>Analytics Challenge Leaderboard</h1>
+<div id='explanation'>
+Welcome to the Analytics Challenge Leaderboard. Here you can submit your score. Keep in mind the following rules:
+<ul>
+<li>You cannot use external information
+<li>Your team can only upload under one team name
+<li>You can do at most 25 submissions during the challenge
+</ul>
+</div>
+</div>
 <table class='table table-hover'>
 <tr>
         <th>Rank</th><th>Team name</th><th>Points</th>
 </tr>
 {% for leaderboard_entry in leaderboard %}
-<tr {% if leaderboard_entry[0] == 1 %}class='success'{% endif %}><td>{{leaderboard_entry[0]}}</td><td>{{leaderboard_entry[1]}}</td><td>{{leaderboard_entry[2]}}</td></tr>
+<tr {% if leaderboard_entry[0] == 1 %}class='success'{% endif %}><td># {{leaderboard_entry[0]}}</td><td>{{leaderboard_entry[1]}}</td><td>{{leaderboard_entry[2]}}</td></tr>
 {% else %}
 
 {% endfor %}
