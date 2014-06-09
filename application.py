@@ -15,7 +15,7 @@ app.secret_key = 'secret key'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Upload size can be maximally 4MB
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
-app.debug = True
+app.debug = False 
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
