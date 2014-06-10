@@ -18,7 +18,7 @@ app.secret_key = 'secret key'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Upload size can be maximally 4MB
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
-app.debug = False 
+app.debug = False
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
@@ -34,6 +34,10 @@ def leaderboard():
     teams_ordered = sorted(leaderboard_dict, key=leaderboard_dict.get, reverse=True)
 
     return [(i+1, team, leaderboard_dict[team]) for i, team in enumerate(teams_ordered)]
+
+def leaderboard_dict():
+    return {entry[1]: entry for entry in leaderboard()}
+
 
 def init_leaderboard_entries():
     # initialize the leaderboard
@@ -57,10 +61,12 @@ def push_leaderboard_entry(score, team, filename):
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
+    entry = None
+    previous_entry = None
     if request.method == 'POST':
         file = request.files['file']
         team = sanitize_team(request.form['team'])
-
+        previous_entry = leaderboard_dict()[team] if team in leaderboard_dict() else None
         if file and allowed_file(file.filename):
             now = datetime.datetime.utcnow() + datetime.timedelta(hours=+1)
             filename = "%s_%s" % (team, now.strftime("%d-%m-%y_%H-%M.csv"))
@@ -68,7 +74,10 @@ def upload_file():
             file.save(file_path)
             score = calculate_score(file_path)
             push_leaderboard_entry(score, team, filename)
-    return render_template('leaderboard.html', leaderboard=leaderboard())
+            entry = leaderboard_dict()[team]
+
+    return render_template('leaderboard.html', leaderboard=leaderboard(),
+            entry=entry, previous_entry=previous_entry)
 
     #'''
     #<!doctype html>
